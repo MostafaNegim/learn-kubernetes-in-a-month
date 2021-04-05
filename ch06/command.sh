@@ -12,3 +12,20 @@ kubectl get rs -l app=pi-web
 kubectl apply -f pi/web/update/web-logging-level.yaml
 # check ReplicaSets again:
 kubectl get rs -l app=pi-web
+
+
+# we need to scale the Pi app fast:
+kubectl scale --replicas=4 deploy/pi-web
+# check which ReplicaSet makes the change:
+kubectl get rs -l app=pi-web
+# now we can revert back to the original logging level:
+kubectl apply -f pi/web/update/web-replicas-3.yaml
+# but that will undo the scale we set manually:
+kubectl get rs -l app=pi-web
+# check the Pods:
+kubectl get pods -l app=pi-web
+
+# list ReplicaSets with labels:
+kubectl get rs -l app=pi-web --show-labels
+# list Pods with labels:
+kubectl get po -l app=pi-web --show-labels
