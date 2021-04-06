@@ -29,3 +29,20 @@ kubectl get pods -l app=pi-web
 kubectl get rs -l app=pi-web --show-labels
 # list Pods with labels:
 kubectl get po -l app=pi-web --show-labels
+
+
+# deploy the proxy resources:
+kubectl apply -f pi/proxy/
+
+# get the URL to the proxied app:
+kubectl get svc whoami-web -o jsonpath='http://{.status.loadBalancer.ingress[0].*}:8080/?dp=10000'
+# browse to the app, and try a few different values for 'dp' in the URL
+
+
+# deploy the updated spec:
+kubectl apply -f pi/proxy/update/nginx-hostPath.yaml
+# check the Pods—the new spec adds a third replica:
+kubectl get po -l app=pi-proxy
+# browse back to the Pi app, and refresh it a few times
+# check the proxy logs:
+kubectl logs -l app=pi-proxy --tail 1
