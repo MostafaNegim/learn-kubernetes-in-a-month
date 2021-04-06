@@ -46,3 +46,10 @@ kubectl get po -l app=pi-proxy
 # browse back to the Pi app, and refresh it a few times
 # check the proxy logs:
 kubectl logs -l app=pi-proxy --tail 1
+
+
+
+
+
+# remove all the controllers and Services:
+kubectl delete all -l kiamol=ch06
