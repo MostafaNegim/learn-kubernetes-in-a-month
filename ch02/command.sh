@@ -7,3 +7,24 @@ kubectl wait --for=condition=Ready pod hello-kiamol
 kubectl get pods
 # show detailed information about the Pod:
 kubectl describe pod hello-kiamol
+
+
+# find the Pod’s container:
+docker container ls -q --filter label=io.kubernetes.container.name=hello-kiamol
+# now delete that container:
+docker container rm -f "$(docker container ls -q --filter label=io.kubernetes.container.name=hello-kiamol)"
+# check the Pod status:
+kubectl get pod hello-kiamol
+# and find the container again:
+docker container ls -q --filter label=io.kubernetes.container.name=hello-kiamol
+
+# listen on port 8080 on your machine and send traffic
+# to the Pod on port 80:
+kubectl port-forward pod/hello-kiamol 8080:80
+# now browse to http://localhost:8080
+# when you’re done press ctrl-c to end the port forward
+
+# create a Deployment called "hello-kiamol-2", running the same web app:
+kubectl create deployment hello-kiamol-2 --image=kiamol/ch02-hello-kiamol
+# list all the Pods:
+kubectl get pods
