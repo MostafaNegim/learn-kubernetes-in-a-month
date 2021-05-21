@@ -14,6 +14,6 @@ spec:
         app: timecheck
     spec:
       containers:
-        - name: kiamol/ch07-timecheck
+        - name: timecheck
           imagePullPolicy: IfNotPresent
           image: kiamol/ch07-timecheck

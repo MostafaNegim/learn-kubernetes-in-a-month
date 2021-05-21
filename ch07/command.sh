@@ -39,3 +39,12 @@ kubectl logs -l app=sleep -c init-html
 kubectl exec deploy/sleep -c server -- ls -l /data-ro
 
 #
+
+# run the app, which uses a single config file:
+kubectl apply -f timecheck/timecheck.yaml
+# check the container logs—there won’t be any:
+kubectl logs -l app=timecheck
+# check the log file inside the container:
+kubectl exec deploy/timecheck -- cat /logs/timecheck.log
+# check the config setup:
+kubectl exec deploy/timecheck -- cat /config/appsettings.json
