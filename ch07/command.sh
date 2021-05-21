@@ -37,3 +37,5 @@ kubectl get pod -l app=sleep -o jsonpath='{.items[0].status.initContainerStatuse
 kubectl logs -l app=sleep -c init-html
 # check that the file is available in the sidecar:
 kubectl exec deploy/sleep -c server -- ls -l /data-ro
+
+#
