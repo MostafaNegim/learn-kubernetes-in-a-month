@@ -58,3 +58,25 @@ kubectl wait --for=condition=ContainersReady pod -l app=timecheck,version=v2
 kubectl exec deploy/timecheck -- cat /logs/timecheck.log
 # see the config file built by the init container:
 kubectl exec deploy/timecheck -- cat /config/appsettings.json
+
+# add the sidecar logging container:
+kubectl apply -f timecheck/timecheck-with-logging.yaml
+# wait for the containers to start:
+kubectl wait --for=condition=ContainersReady pod -l app=timecheck,version=v3
+# check the Pods:
+kubectl get pods -l app=timecheck
+# check the containers in the Pod:
+kubectl get pod -l app=timecheck -o jsonpath='{.items[0].status.containerStatuses[*].name}'
+# now you can see the app logs in the Pod:
+kubectl logs -l app=timecheck -c logger
+
+# apply the update:
+kubectl apply -f timecheck/timecheck-good-citizen.yaml
+# wait for all the containers to be ready:
+kubectl wait --for=condition=ContainersReady pod -l app=timecheck,version=v4
+# check the running containers:
+kubectl get pod -l app=timecheck -o jsonpath='{.items[0].status.containerStatuses[*].name}'
+# use the sleep container to check the timecheck app health:
+kubectl exec deploy/sleep -c sleep -- wget -q -O - http://timecheck:8080
+# check its metrics:
+kubectl exec deploy/sleep -c sleep -- wget -q -O - http://timecheck:8081
