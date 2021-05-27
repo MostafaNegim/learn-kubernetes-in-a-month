@@ -13,3 +13,12 @@ kubectl get pods -l app=todo-db
 kubectl exec pod/todo-db-0 -- hostname
 # check the logs of Pod 1:
 kubectl logs todo-db-1 --tail 1
+
+# check the internal ID of Pod 0:
+kubectl get pod todo-db-0 -o jsonpath='{.metadata.uid}'
+# delete the Pod:
+kubectl delete pod todo-db-0
+# check Pods:
+kubectl get pods -l app=todo-db
+# check that the new Pod is a new Pod:
+kubectl get pod todo-db-0 -o jsonpath='{.metadata.uid}'
