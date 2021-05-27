@@ -89,3 +89,12 @@ kubectl get svc numbers-web -o jsonpath='http://{.status.loadBalancer.ingress[0]
 # check that the web app has access to other endpoints:
 kubectl exec deploy/numbers-web -c web -- wget -q -O - http://timecheck:8080
 
+# apply the update from listing 7.5:
+kubectl apply -f numbers/update/web-with-proxy.yaml
+# refresh your browser, and get a new number
+# check the proxy container logs:
+kubectl logs -l app=numbers-web -c proxy
+# try to read the health of the timecheck app:
+kubectl exec deploy/numbers-web -c web -- wget -q -O - http://timecheck:8080
+# check proxy logs again:
+kubectl logs -l app=numbers-web -c proxy
