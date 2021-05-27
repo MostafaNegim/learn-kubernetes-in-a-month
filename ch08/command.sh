@@ -22,3 +22,12 @@ kubectl delete pod todo-db-0
 kubectl get pods -l app=todo-db
 # check that the new Pod is a new Pod:
 kubectl get pod todo-db-0 -o jsonpath='{.metadata.uid}'
+
+# show the Service details:
+kubectl get svc todo-db
+# run a sleep Pod to use for network lookups:
+kubectl apply -f sleep/sleep.yaml
+# run a DNS query for the Service name:
+kubectl exec deploy/sleep -- sh -c 'nslookup todo-db | grep "^[^*]"'
+# run a DNS lookup for Pod 0:
+kubectl exec deploy/sleep -- sh -c 'nslookup todo-db-0.tododb.default.svc.cluster.local | grep "^[^*]"'
