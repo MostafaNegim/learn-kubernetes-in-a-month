@@ -98,3 +98,25 @@ kubectl logs -l app=numbers-web -c proxy
 kubectl exec deploy/numbers-web -c web -- wget -q -O - http://timecheck:8080
 # check proxy logs again:
 kubectl logs -l app=numbers-web -c proxy
+
+# apply the update:
+kubectl apply -f numbers/update/web-v2-broken-init-container.yaml
+# check the new Pod:
+kubectl get po -l app=numbers-web,version=v2
+# check the logs for the new init container:
+kubectl logs -l app=numbers-web,version=v2 -c init-version
+# check the status of the Deployment:
+kubectl get deploy numbers-web
+# check the status of the ReplicaSets:
+kubectl get rs -l app=numbers-web
+
+# check the processes in the current container:
+kubectl exec deploy/sleep -c sleep -- ps
+# apply the update:
+kubectl apply -f sleep/sleep-with-server-shared.yaml
+# wait for the new containers:
+kubectl wait --for=condition=ContainersReady pod -l app=sleep,version=shared
+# check the processes again:
+kubectl exec deploy/sleep -c sleep -- ps
+
+kubectl delete all -l kiamol=ch07
