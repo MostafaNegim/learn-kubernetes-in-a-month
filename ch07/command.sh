@@ -80,3 +80,12 @@ kubectl get pod -l app=timecheck -o jsonpath='{.items[0].status.containerStatuse
 kubectl exec deploy/sleep -c sleep -- wget -q -O - http://timecheck:8080
 # check its metrics:
 kubectl exec deploy/sleep -c sleep -- wget -q -O - http://timecheck:8081
+
+# deploy the app and Services:
+kubectl apply -f numbers/
+# find the URL for your app:
+kubectl get svc numbers-web -o jsonpath='http://{.status.loadBalancer.ingress[0].*}:8090'
+# browse and get yourself a nice random number
+# check that the web app has access to other endpoints:
+kubectl exec deploy/numbers-web -c web -- wget -q -O - http://timecheck:8080
+
