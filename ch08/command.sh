@@ -31,3 +31,12 @@ kubectl apply -f sleep/sleep.yaml
 kubectl exec deploy/sleep -- sh -c 'nslookup todo-db | grep "^[^*]"'
 # run a DNS lookup for Pod 0:
 kubectl exec deploy/sleep -- sh -c 'nslookup todo-db-0.tododb.default.svc.cluster.local | grep "^[^*]"'
+
+# deploy the replicated StatefulSet setup:
+kubectl apply -f todo-list/db/replicated/
+# wait for the Pods to spin up
+kubectl wait --for=condition=Ready pod -l app=todo-db
+# check the logs of Pod 0—the primary:
+kubectl logs todo-db-0 --tail 1
+# and of Pod 1—the secondary:
+kubectl logs todo-db-1 --tail 2
