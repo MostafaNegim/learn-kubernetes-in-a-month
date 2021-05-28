@@ -40,3 +40,22 @@ kubectl wait --for=condition=Ready pod -l app=todo-db
 kubectl logs todo-db-0 --tail 1
 # and of Pod 1—the secondary:
 kubectl logs todo-db-1 --tail 2
+
+# add another replica:
+kubectl scale --replicas=3 statefulset/todo-db
+# wait for Pod 2 to spin up
+kubectl wait --for=condition=Ready pod -l app=todo-db
+# check that the new Pod sets itself up as another secondary:
+kubectl logs todo-db-2 --tail 2
+
+#8.3
+# deploy the StatefulSet with volume claim templates:
+kubectl apply -f sleep/sleep-with-pvc.yaml
+# check that the PVCs are created:
+kubectl get pvc
+# write some data to the PVC mount in Pod 0:
+kubectl exec sleep-with-pvc-0 -- sh -c 'echo Pod 0 > /data/pod.txt'
+# confirm Pod 0 can read the data:
+kubectl exec sleep-with-pvc-0 -- cat /data/pod.txt
+# confirm Pod 1 can’t—this will fail:
+kubectl exec sleep-with-pvc-1 -- cat /data/pod.txt
