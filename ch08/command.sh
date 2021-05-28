@@ -66,3 +66,20 @@ kubectl delete pod sleep-with-pvc-0
 kubectl get pods -l app=sleep-with-pvc
 # check that the new Pod 0 can see the old data:
 kubectl exec sleep-with-pvc-0 -- cat /data/pod.txt
+
+# apply the update with volume claim templates—this will fail:
+kubectl apply -f todo-list/db/replicated/update/todo-db-pvc.yaml
+# delete the existing set:
+kubectl delete statefulset todo-db
+# create a new one with volume claims:
+kubectl apply -f todo-list/db/replicated/update/todo-db-pvc.yaml
+# check the volume claims:
+kubectl get pvc -l app=todo-db
+
+#8.4
+# deploy the Job:
+kubectl apply -f pi/pi-job.yaml
+# check the logs for the Pod:
+kubectl logs -l job-name=pi-job
+# check the status of the Job:
+kubectl get job pi-job

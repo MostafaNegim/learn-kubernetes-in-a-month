@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi-job
+  labels:
+    kiamol: ch08
+spec:
+  template:
+    spec:
+      containers:
+        - name: pi
+          image: kiamol/ch05-pi
+          imagePullPolicy: IfNotPresent
+          command: ["dotnet", "Pi.Web.dll", "-m", "console", "-dp", "50"]
+      restartPolicy: Never
