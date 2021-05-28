@@ -83,3 +83,12 @@ kubectl apply -f pi/pi-job.yaml
 kubectl logs -l job-name=pi-job
 # check the status of the Job:
 kubectl get job pi-job
+
+# deploy the new Job:
+kubectl apply -f pi/pi-job-random.yaml
+# check the Pod status:
+kubectl get pods -l job-name=pi-job-random
+# check the Job status:
+kubectl get job pi-job-random
+# list the Pod output:
+kubectl logs -l job-name=pi-job-random
