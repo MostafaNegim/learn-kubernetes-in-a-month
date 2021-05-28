@@ -59,3 +59,10 @@ kubectl exec sleep-with-pvc-0 -- sh -c 'echo Pod 0 > /data/pod.txt'
 kubectl exec sleep-with-pvc-0 -- cat /data/pod.txt
 # confirm Pod 1 can’t—this will fail:
 kubectl exec sleep-with-pvc-1 -- cat /data/pod.txt
+
+# delete the Pod:
+kubectl delete pod sleep-with-pvc-0
+# check that the replacement gets created:
+kubectl get pods -l app=sleep-with-pvc
+# check that the new Pod 0 can see the old data:
+kubectl exec sleep-with-pvc-0 -- cat /data/pod.txt
