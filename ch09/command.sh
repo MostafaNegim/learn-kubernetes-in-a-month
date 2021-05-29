@@ -11,3 +11,10 @@ kubectl apply -f vweb/update/vweb-v1-scale.yaml
 kubectl get rs -l app=vweb
 # check the deployment history:
 kubectl rollout history deploy/vweb
+
+# update the image for the web app:
+kubectl set image deployment/vweb web=kiamol/ch09-vweb:v2
+# check the ReplicaSets again:
+kubectl get rs -l app=vweb
+# check the rollouts:
+kubectl rollout history deploy/vweb
