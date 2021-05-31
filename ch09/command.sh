@@ -18,3 +18,13 @@ kubectl set image deployment/vweb web=kiamol/ch09-vweb:v2
 kubectl get rs -l app=vweb
 # check the rollouts:
 kubectl rollout history deploy/vweb
+
+#9.2
+# apply the change using the record flag:
+kubectl apply -f vweb/update/vweb-v11.yaml --record
+# check the ReplicaSets and their labels:
+kubectl get rs -l app=vweb --show-labels
+# check the current rollout status:
+kubectl rollout status deploy/vweb
+# check the rollout history:
+kubectl rollout history deploy/vweb
